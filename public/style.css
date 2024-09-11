@@ -1,93 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+/* default custom cursor */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    cursor: url('paw.png') 16 16, auto;
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    overflow: hidden;
+/* hover over links/buttons makes it grow/pop out */
+a:hover, button:hover {
+    cursor: url('paw.png') 16 16, auto;
+    transform: scale(1.2); /* Grows the cursor by 20% */
+    transition: transform 0.3s ease; /* Smooth transition */
 }
 
-header {
+
+/* general style for all sections */
+.section-one,
+.section-two,
+.third-section {
+    padding: 60px 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    padding: 10px 0;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    flex-wrap: wrap;
+    min-height: 500px;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 24px;
+/* logo style */
+.logo-image {
+    height: 110px;
+    width: auto;
+    vertical-align: middle;
 }
 
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+/* navbar links style */
+.navbar-nav .nav-link {
+    font-family: 'Georgia', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #815c3f;
+    text-transform: none;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #503629;
+}
+
+/* navbar background color */
+.navbar {
+    background-color: #fce5d4 !important;
+    padding: 10px 20px;
+    height: 80px;
     display: flex;
-    gap: 15px;
+    align-items: center;
 }
 
-nav ul li {
-    display: inline;
+/* 1st section w/ image and text) */
+.section-one {
+    background-color: #c3cdc1; /* light green */
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    padding: 5px 10px;
+.section-one h1,
+.section-two h4,
+.third-section h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-nav ul li a:hover {
-    color: #555;
+.section-one h2,
+.section-two p,
+.third-section p {
+    font-family: 'Pacifico', cursive;
+    font-size: 2rem;
+    color: #fce5d4;
+    font-weight: normal;
 }
 
-.slider {
+.section-one p {
+    font-size: 1.1rem;
+    color: white;
+}
+
+/* image and text Section */
+.section-one .image-section img,
+.third-section .image-section img {
     width: 100%;
-    max-width: 1200px;
-    margin-top: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-width: 350px;
+    border-radius: 15px;
 }
 
-.slides {
+.section-one .text-section,
+.section-two .slideshow-text {
+    max-width: 50%;
+    text-align: left;
+}
+
+/* 2nd section w/ slideshow */
+.section-two {
+    background-color: #fce5d4; /* Beige */
+    padding: 60px 10%;
+}
+
+.carousel-container {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 500px;
 }
 
-.slide {
-    min-width: 100%;
-    box-sizing: border-box;
+.carousel {
+    flex: 1;
+    max-width: 35%;
+    margin-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.slide img {
+.carousel-item img {
     width: 100%;
-    display: block;
-    border-radius: 10px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.slideshow-text {
+    flex: 1;
+    max-width: 50%;
+    text-align: left;
+    font-family: 'Georgia', serif;
+    color: #503629;
+}
+
+.slideshow-text h4 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #503629;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.slideshow-text p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+/* 3rd section (why choose us and join now)*/
+.third-section {
+    background-color: #c3cdc1;
+    text-align: center;
+    padding: 60px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.why-love-it {
+    flex: 1;
+    text-align: left;
+    font-family: 'Georgia', serif;
+    color: #503629;
+}
+
+.why-love-it h4 {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+    color: #374e48;
+}
+
+.why-love-it ul {
+    list-style-type: disc;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    color: #374e48;
+    padding-left: 15px;
+}
+
+.why-love-it li {
+    margin-bottom: 10px;
+}
+
+/* mid image in 3rd section */
+.third-section .image-section {
+    flex: 1;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+/* free treats text */
+.free-treats {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.free-treats h4 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #374e48;
+    margin-bottom: 20px;
+}
+
+.free-treats p {
+    font-family: Georgia;
+    font-size: 1.2rem;
+    color: #374e48;
+    margin-bottom: 20px;
+    max-width: 250px;
+    width: 100%;
+    text-align: center;
+}
+
+/* centered join button */
+.join-now-btn {
+    font-size: 1.2rem;
+    color: white;
+    background-color: #ff6b6b;
+    padding: 12px 30px;
+    font-weight: bold;
+    border-radius: 25px;
+}
+
+.join-now-btn:hover {
+    background-color: #e05555;
+}
+
+/* modal styles */
+.modal-content {
+    background-color: #f8e8d4;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.modal-title {
+    color: #815c3f;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.modal-body label {
+    color: #503629;
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+}
+
+.modal-body input {
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+}
+
+.modal-body .form-check-label {
+    font-family: 'Georgia', serif;
+    color: #503629;
+}
+
+.modal-body .btn-primary {
+    background-color: #ff6b6b;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 25px;
+    text-transform: uppercase;
+}
+
+.modal-body .btn-primary:hover {
+    background-color: #e05555;
+}
+
+.modal-header .btn-close {
+    color: #503629;
+}
+
+/* center  modal */
+.modal-dialog {
+    margin-top: 100px;
+}
+
+/* enable responsive layout */
+@media (max-width: 992px) {
+    .section-one,
+    .section-two,
+    .third-section {
+        flex-direction: column;
+        text-align: center;
+        min-height: auto;
+    }
+
+    .section-one .text-section,
+    .section-two .slideshow-text,
+    .why-love-it,
+    .free-treats {
+        max-width: 100%;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .third-section .image-section {
+        max-width: 80%;
+    }
 }
 
 footer {
-    width: 100%;
+    background-color: #f8e8d4;
+    color: #815c3f;
+    font-size: 1rem;
     text-align: center;
-    padding: 10px 0;
-    background-color: #fff;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    margin: 0 auto;
 }
 
-footer p {
-    margin: 0;
-    font-size: 14px;
-    color: #777;
+.btn-brown {
+    background-color: #815c3f; /* main brown color */
+    color: white;
+}
+
+.btn-brown:hover {
+    background-color: #503629; /* darker brown for hover */
+    color: white;
+}
+
+.btn-outline-brown {
+    color: #815c3f;
+    border: 2px solid #815c3f;
+}
+
+.btn-outline-brown:hover {
+    background-color: #815c3f;
+    color: white;
+    border: 2px solid #815c3f;
 }
