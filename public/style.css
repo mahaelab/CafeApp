@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
-/* Default cursor */
+/* default custom cursor */
 body {
     cursor: url('paw.png') 16 16, auto;
 }
 
-/* On hover over links/buttons */
+/* hover over links/buttons makes it grow/pop out */
 a:hover, button:hover {
     cursor: url('paw.png') 16 16, auto;
     transform: scale(1.2); /* Grows the cursor by 20% */
@@ -14,7 +14,7 @@ a:hover, button:hover {
 }
 
 
-/* General Section Styling for All Sections */
+/* general style for all sections */
 .section-one,
 .section-two,
 .third-section {
@@ -27,14 +27,14 @@ a:hover, button:hover {
     min-height: 500px;
 }
 
-/* Logo Image Styling */
+/* logo style */
 .logo-image {
     height: 110px;
     width: auto;
     vertical-align: middle;
 }
 
-/* Nav-link Styling */
+/* navbar links style */
 .navbar-nav .nav-link {
     font-family: 'Georgia', serif;
     font-size: 1.3rem;
@@ -49,7 +49,7 @@ a:hover, button:hover {
     color: #503629;
 }
 
-/* Navbar Background Color */
+/* navbar background color */
 .navbar {
     background-color: #fce5d4 !important;
     padding: 10px 20px;
@@ -58,9 +58,9 @@ a:hover, button:hover {
     align-items: center;
 }
 
-/* First Section (Image and Text) */
+/* 1st section w/ image and text) */
 .section-one {
-    background-color: #c3cdc1; /* Light green */
+    background-color: #c3cdc1; /* light green */
 }
 
 .section-one h1,
@@ -88,7 +88,7 @@ a:hover, button:hover {
     color: white;
 }
 
-/* Image and Text Section */
+/* image and text Section */
 .section-one .image-section img,
 .third-section .image-section img {
     width: 100%;
@@ -103,7 +103,7 @@ a:hover, button:hover {
     text-align: left;
 }
 
-/* Second Section (Slideshow Section) */
+/* 2nd section w/ slideshow */
 .section-two {
     background-color: #fce5d4; /* Beige */
     padding: 60px 10%;
@@ -132,29 +132,6 @@ a:hover, button:hover {
     border-radius: 15px;
 }
 
-/* Carousel indicators (buttons at the bottom) */
-.carousel-indicators {
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
-.carousel-indicators button {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #815c3f;
-    border: none;
-}
-
-.carousel-indicators .active {
-    background-color: #503629;
-}
-
 .slideshow-text {
     flex: 1;
     max-width: 50%;
@@ -177,7 +154,7 @@ a:hover, button:hover {
     line-height: 1.8;
 }
 
-/* Third Section (Why You'll Love It and Join Now) */
+/* 3rd section (why choose us and join now)*/
 .third-section {
     background-color: #c3cdc1;
     text-align: center;
@@ -215,14 +192,14 @@ a:hover, button:hover {
     margin-bottom: 10px;
 }
 
-/* Middle Image in Third Section */
+/* mid image in 3rd section */
 .third-section .image-section {
     flex: 1;
     max-width: 350px;
     margin: 0 auto;
 }
 
-/* Free Treats Section */
+/* free treats text */
 .free-treats {
     flex: 1;
     text-align: center;
@@ -249,7 +226,7 @@ a:hover, button:hover {
     text-align: center;
 }
 
-/* Centered Join Now Button */
+/* centered join button */
 .join-now-btn {
     font-size: 1.2rem;
     color: white;
@@ -263,7 +240,7 @@ a:hover, button:hover {
     background-color: #e05555;
 }
 
-/* Modal Styles */
+/* modal styles */
 .modal-content {
     background-color: #f8e8d4;
     border-radius: 15px;
@@ -295,7 +272,6 @@ a:hover, button:hover {
 
 .modal-body .btn-primary {
     background-color: #ff6b6b;
-    border: none;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     padding: 10px;
@@ -311,12 +287,12 @@ a:hover, button:hover {
     color: #503629;
 }
 
-/* Center the modal */
+/* center  modal */
 .modal-dialog {
     margin-top: 100px;
 }
 
-/* Responsive Layout */
+/* enable responsive layout */
 @media (max-width: 992px) {
     .section-one,
     .section-two,
@@ -351,13 +327,12 @@ footer {
 }
 
 .btn-brown {
-    background-color: #815c3f; /* Main brown color */
+    background-color: #815c3f; /* main brown color */
     color: white;
-    border: none;
 }
 
 .btn-brown:hover {
-    background-color: #503629; /* Darker brown for hover */
+    background-color: #503629; /* darker brown for hover */
     color: white;
 }
 
