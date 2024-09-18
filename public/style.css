@@ -13,7 +13,6 @@ a:hover, button:hover {
     transition: transform 0.3s ease; /* Smooth transition */
 }
 
-
 /* general style for all sections */
 .section-one,
 .section-two,
@@ -58,7 +57,16 @@ a:hover, button:hover {
     align-items: center;
 }
 
-/* 1st section w/ image and text) */
+.navbar-nav {
+    margin-left: auto;
+}
+
+/* align dropdown to the right */
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+/* 1st section w/ image and text */
 .section-one {
     background-color: #c3cdc1; /* light green */
 }
@@ -88,7 +96,7 @@ a:hover, button:hover {
     color: white;
 }
 
-/* image and text Section */
+/* image and text section */
 .section-one .image-section img,
 .third-section .image-section img {
     width: 100%;
@@ -154,7 +162,7 @@ a:hover, button:hover {
     line-height: 1.8;
 }
 
-/* 3rd section (why choose us and join now)*/
+/* 3rd section (why choose us and join now) */
 .third-section {
     background-color: #c3cdc1;
     text-align: center;
@@ -292,7 +300,74 @@ a:hover, button:hover {
     margin-top: 100px;
 }
 
-/* enable responsive layout */
+.navbar .auth-buttons {
+    margin-left: auto; /* Pushes the buttons to the right side */
+    display: flex;
+    gap: 10px;
+}
+
+/* sign-in/up buttons style */
+.btn-brown, .btn-outline-brown {
+    background-color: #815c3f;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-outline-brown {
+    background-color: transparent;
+    color: #815c3f;
+    border: 2px solid #815c3f;
+}
+
+.btn-outline-brown:hover {
+    background-color: #815c3f;
+    color: white;
+    border: 2px solid #815c3f;
+}
+
+/* responsive behavior */
+@media (max-width: 992px) {
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: auto;
+        padding: 1px 20px;
+    }
+
+    /* keeps logo on the left */
+    .navbar-brand {
+        order: 1;
+        margin-right: auto;
+    }
+
+    /* hamburger stays on the right */
+    .navbar-toggler {
+        order: 2;
+        margin-left: auto;
+        border: none;
+    }
+
+    /* menu appears below the burger */
+    .navbar-collapse {
+        order: 3;
+        background-color: #fce5d4;
+        justify-content: flex-end;
+
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        text-align: left; /* left-aligns items in dropdown */
+        padding-left: 20px;
+    }
+
+    .navbar-nav .nav-link {
+        margin: 10px 0;
+    }
+}
+
+/* responsive layout adjustments */
 @media (max-width: 992px) {
     .section-one,
     .section-two,
@@ -314,6 +389,18 @@ a:hover, button:hover {
     .third-section .image-section {
         max-width: 80%;
     }
+
+    /* menu aligns to the right */
+    .navbar-nav {
+        flex-direction: column;
+        align-items: flex-end;
+        margin-left: 0;
+    }
+
+    .navbar-collapse {
+        justify-content: flex-end;
+    }
+
 }
 
 footer {
@@ -345,4 +432,14 @@ footer {
     background-color: #815c3f;
     color: white;
     border: 2px solid #815c3f;
+}
+
+@media (max-width: 992px) {
+    .why-love-it {
+        text-align: left;
+    }
+
+    .why-love-it h4 {
+        text-align: center;
+    }
 }
