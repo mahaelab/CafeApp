@@ -350,20 +350,35 @@ a:hover, button:hover {
 
     /* menu appears below the burger */
     .navbar-collapse {
-        order: 3;
-        background-color: #fce5d4;
-        justify-content: flex-end;
-
+        position: absolute; /* positions dropdown relative to the navbar */
+        top: 90px; /* positions dropdown just below the hamburger icon */
+        right: 0px; /* aligns it to the right underneath the icon */
+        width: auto; /* adjusts width based on content */
+        max-width: fit-content; /* ensures width fits the content */
+        background-color: #e0e7da; /* light sage green */
+        border-radius: 8px; /* add a slight rounding to the dropdown */
+        border: 2px solid #815c3f;
+        padding: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* slight shadow for dropdown */
     }
 
     .navbar-nav {
+        text-align: center; /* center the text */
+        width: 100%;
         flex-direction: column;
-        text-align: left; /* left-aligns items in dropdown */
-        padding-left: 20px;
+        align-items: flex-start; /* aligns items left for dropdown */
+        padding-left: 0;
+        margin: 0;
+
     }
 
+
     .navbar-nav .nav-link {
-        margin: 10px 0;
+        text-align: center; /* make sure the text is left-aligned */
+        padding: 10px 20px; /* keep padding balanced for dropdown */
+        width: 100%;
+        color: #503629; /* dark brown text color */
+
     }
 }
 
@@ -443,3 +458,4 @@ footer {
         text-align: center;
     }
 }
+
