@@ -79,6 +79,7 @@
                         <input type="password" class="form-control" id="signInPassword" placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                    <div id="signInMessage" class="mt-2 text-success" style="display:none;">Thank you for signing in!</div> <!-- success message -->
                 </form>
             </div>
         </div>
@@ -109,6 +110,7 @@
                         <input type="password" class="form-control" id="signUpPassword" placeholder="Create a password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    <div id="signUpMessage" class="mt-2 text-success" style="display:none;">Thank you for signing up!</div> <!-- success message -->
                 </form>
             </div>
         </div>
@@ -135,6 +137,7 @@
                         <input type="password" class="form-control" id="joinNowPassword" placeholder="Create a password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Join Now</button>
+                    <div id="joinNowMessage" class="mt-2 text-success" style="display:none;">Thank you for joining!</div> <!-- success message -->
                 </form>
             </div>
         </div>
@@ -166,9 +169,7 @@
                         referrerpolicy="strict-origin-when-cross-origin"
                         allowfullscreen>
                 </iframe>
-
             </div>
-
         </div>
         <!-- carousel navigation buttons -->
         <button class="carousel-control-prev" type="button" data-bs-target="#catpuccinoCarousel" data-bs-slide="prev">
@@ -219,6 +220,28 @@
 <footer>
     <p>© 2024 Bean & Leaf Café. All rights reserved.</p>
 </footer>
+
+<!-- javascript for form validation and simulation -->
+<script>
+    // prevent default form submission and show success message
+    document.getElementById('signInForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('signInMessage').style.display = 'block'; // show message
+        this.reset();
+    });
+
+    document.getElementById('signUpForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('signUpMessage').style.display = 'block'; // show message
+        this.reset();
+    });
+
+    document.getElementById('joinNowForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('joinNowMessage').style.display = 'block'; // show message
+        this.reset();
+    });
+</script>
 
 <!-- bootstrap JS for modal and carousel functionality -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
