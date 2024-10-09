@@ -39,9 +39,15 @@
                 </li>
             </ul>
             <!-- buttons for sign in/up -->
-            <div class="ms-auto">
+            <div class="ms-auto" id="authButtons">
                 <a href="#" class="btn btn-outline-brown me-2" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</a>
                 <a href="#" class="btn btn-brown" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</a>
+            </div>
+
+            <!-- profile section hidden by default -->
+            <div id="userProfile" style="display: none;">
+                <span id="userName"></span> |
+                <a href="#" id="logoutButton" style="cursor: pointer; text-decoration: underline; color: brown;">Logout</a>
             </div>
         </div>
     </nav>
@@ -144,103 +150,70 @@
     </div>
 </div>
 
-<!-- 2nd section w/ media carousel for images/vid -->
-<section class="carousel-container">
-    <div id="catpuccinoCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <!-- slide 1 -->
-            <div class="carousel-item active">
-                <img src="p1.jpg" class="carousel-image" alt="Catpuccino Flavor 1">
-            </div>
-            <!-- slide 2 -->
-            <div class="carousel-item">
-                <img src="p2.jpg" class="carousel-image" alt="Catpuccino Flavor 2">
-            </div>
-            <!-- slide 3 -->
-            <div class="carousel-item">
-                <img src="p3.jpg" class="carousel-image" alt="Catpuccino Flavor 3">
-            </div>
-            <div class="carousel-item">
-                <iframe width="560" height="315"
-                        src="https://www.youtube.com/embed/ICV1mCSOB3Q?autoplay=1&mute=1&si=Ies_f1ACWpuzrIZs"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-        <!-- carousel navigation buttons -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#catpuccinoCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#catpuccinoCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-
-    <!-- text to the right of the carousel -->
-    <div class="slideshow-text">
-        <h4>CELEBRATE THE NEW SEASON</h4>
-        <p>Enjoy our new flavors including refreshing Matcha, rich Mocha, or sweet Passion Fruit Catpuccinos.</p>
-        <p>Get 10% off your first order when you become a member!</p>
-    </div>
-</section>
-
-<!-- 3rd section: Why choose us text with image and CTA -->
-<section class="third-section">
-    <div class="why-love-it">
-        <h4>WHY CHOOSE US?</h4>
-        <p> </p>
-        <ul>
-            <li>Organic and fair-trade coffee beans</li>
-            <li>Great unique flavors</li>
-            <li>Options for ingredient substitutions</li>
-            <li>Aesthetic and purrfect for social media</li>
-        </ul>
-    </div>
-
-    <!-- centered image -->
-    <div class="image-section">
-        <img src="p6.jpg" alt="Catpuccino Image">
-    </div>
-
-    <!-- free treats & "join now" CTA on the right -->
-    <div class="free-treats">
-        <h4>FREE TREATS AWAIT</h4>
-        <p>Become a member and get rewards with every purchase!</p>
-        <a href="#" class="join-now-btn" data-bs-toggle="modal" data-bs-target="#joinNowModal">JOIN NOW</a>
-    </div>
-</section>
-
-<!-- footer section -->
-<footer>
-    <p>© 2024 Bean & Leaf Café. All rights reserved.</p>
-</footer>
-
-<!-- javascript for form validation and simulation -->
+<!-- javascript for form validation and handling login/logout -->
 <script>
-    // prevent default form submission and show success message
+    // handles sign in form submission
     document.getElementById('signInForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById('signInMessage').style.display = 'block'; // show message
-        this.reset();
+
+        const email = document.getElementById('signInEmail').value;
+        const password = document.getElementById('signInPassword').value;
+
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // store user info locally
+                    localStorage.setItem('userName', data.user.name);
+
+                    document.getElementById('authButtons').style.display = 'none';
+                    document.getElementById('userProfile').style.display = 'inline';
+                    document.getElementById('userName').textContent = data.user.name;
+
+                    this.reset();
+                } else {
+                    console.error('Login failed:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error during login request:', error);
+            });
     });
 
-    document.getElementById('signUpForm').addEventListener('submit', function (e) {
+    // handles user logout
+    document.getElementById('logoutButton').addEventListener('click', function (e) {
         e.preventDefault();
-        document.getElementById('signUpMessage').style.display = 'block'; // show message
-        this.reset();
+
+        // clears local storage
+        localStorage.removeItem('userName');
+
+        // sends a request to log out
+        fetch('http://localhost:3000/logout')
+            .then(() => {
+                // Show the authentication buttons and hide the profile section
+                document.getElementById('authButtons').style.display = 'inline';
+                document.getElementById('userProfile').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+            });
     });
 
-    document.getElementById('joinNowForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        document.getElementById('joinNowMessage').style.display = 'block'; // show message
-        this.reset();
-    });
+    // check if the user is logged in on page load
+    if (localStorage.getItem('userName')) {
+        document.getElementById('authButtons').style.display = 'none';
+        document.getElementById('userProfile').style.display = 'inline';
+        document.getElementById('userName').textContent = localStorage.getItem('userName');
+    }
 </script>
 
 <!-- bootstrap JS for modal and carousel functionality -->
