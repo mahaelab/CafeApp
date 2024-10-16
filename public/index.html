@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<!-- Header section with navbar -->
+<!-- header section with navbar -->
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <!-- top left logo -->
@@ -44,15 +44,17 @@
                 <a href="#" class="btn btn-brown" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</a>
             </div>
 
-            <!-- Profile section (hidden by default) -->
-            <div id="userProfile" style="display: none;">
-                <span id="userName"></span> | <a href="#" id="logoutButton">Logout</a>
+            <!-- user profile section -->
+            <div id="userProfile" style="display: none; position: relative;">
+                <img src="pic.png" id="userLogo" class="user-logo">
+                <div id="userBubble" class="user-bubble"> <span id="userName"></span></div>
+                <a href="#" id="logoutButton" class="btn btn-outline-brown me-2">Logout</a>
             </div>
         </div>
     </nav>
 </header>
 
-<!-- 1st Section: main image and headings/description -->
+<!-- 1st section: main image and headings/description -->
 <section class="section-one">
     <div class="image-section">
         <img src="p5.jpg" alt="Catpuccino Image">
@@ -84,8 +86,14 @@
                         <input type="password" class="form-control" id="signInPassword" placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Sign In</button>
-                    <div id="signInMessage" class="mt-2 text-success" style="display:none;">Thank you for signing in!</div> <!-- success message -->
+                    <!-- error message for incorrect credentials -->
+                    <div id="signInError" class="mt-2 text-danger" style="display:none;">Invalid credentials. Please try again.</div>
+                    <div id="signInMessage" class="mt-2 text-success" style="display:none;">Thank you for signing in!</div>
                 </form>
+                <!-- forgot password link -->
+                <p class="mt-3">
+                    <a href="#" id="forgotPasswordLink" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot your password?</a>
+                </p>
             </div>
         </div>
     </div>
@@ -116,6 +124,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                     <div id="signUpMessage" class="mt-2 text-success" style="display:none;">Thank you for signing up!</div> <!-- success message -->
+                    <div id="signUpError" class="mt-2 text-danger" style="display:none;">There was a problem with your registration.</div> <!-- error message -->
                 </form>
             </div>
         </div>
@@ -228,6 +237,65 @@
 
 <!-- javascript for form validation and handling login/logout -->
 <script>
+    // sign-up form submission
+    document.getElementById('signUpForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const fullName = document.getElementById('signUpFullName').value;
+        const email = document.getElementById('signUpEmail').value;
+        const password = document.getElementById('signUpPassword').value;
+
+        // reset error and success messages
+        document.getElementById('signUpMessage').style.display = 'none';
+        document.getElementById('signUpError').style.display = 'none';
+
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: fullName,  // Make sure the name field is correctly passed as 'name'
+                email: email,
+                password: password
+            })
+        })
+            .then(response => {
+                // Check if response is successful
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Sign up failed');
+                }
+            })
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('signUpMessage').style.display = 'block'; // success message
+
+                    // Automatically log the user in after successful registration
+                    localStorage.setItem('userName', fullName);
+                    document.getElementById('authButtons').style.display = 'none';
+                    document.getElementById('userProfile').style.display = 'inline';
+                    document.getElementById('userName').textContent = fullName;
+
+                    // Close the modal after successful sign-up
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('signUpModal'));
+                        modal.hide();
+                    }, 1000); // Delay to show the success message before closing
+
+                    this.reset(); // Clear the form
+                } else {
+                    // In case of any issue (this shouldn't happen since we're checking success already)
+                    document.getElementById('signUpError').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error during sign-up request:', error);
+                document.getElementById('signUpError').style.display = 'block'; // show error message
+            });
+    });
+
     // sign-in form submission
     document.getElementById('signInForm').addEventListener('submit', function (e) {
         e.preventDefault();
@@ -235,7 +303,11 @@
         const email = document.getElementById('signInEmail').value;
         const password = document.getElementById('signInPassword').value;
 
-        fetch('http://localhost:3000/login', {
+        // reset error and success messages
+        document.getElementById('signInError').style.display = 'none';
+        document.getElementById('signInMessage').style.display = 'none';
+
+        fetch('/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -245,22 +317,54 @@
                 password: password
             })
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Invalid credentials'); // handle non-200 responses
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     localStorage.setItem('userName', data.user.name);
-
                     document.getElementById('authButtons').style.display = 'none';
                     document.getElementById('userProfile').style.display = 'inline';
                     document.getElementById('userName').textContent = data.user.name;
 
+                    document.getElementById('signInMessage').style.display = 'block'; // success message
                     this.reset();
                 } else {
-                    console.error('Login failed:', data.message);
+                    throw new Error('Login failed'); // handle other failure cases
                 }
             })
             .catch(error => {
                 console.error('Error during login request:', error);
+                document.getElementById('signInError').style.display = 'block'; // show error message
+            });
+    });
+
+    // forgot password form submission
+    document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('forgotPasswordEmail').value;
+
+        // send a POST request to the backend to initiate the password reset
+        fetch('/forgot-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('forgotPasswordMessage').style.display = 'block'; // show success message
+                this.reset(); // reset the form
+            })
+            .catch(error => {
+                console.error('Error during password reset request:', error);
             });
     });
 
@@ -268,13 +372,10 @@
     document.getElementById('logoutButton').addEventListener('click', function (e) {
         e.preventDefault();
 
-        // clocal storage
         localStorage.removeItem('userName');
 
-        // request to log out
-        fetch('http://localhost:3000/logout')
+        fetch('/logout')
             .then(() => {
-                // Show the authentication buttons and hide the profile section
                 document.getElementById('authButtons').style.display = 'inline';
                 document.getElementById('userProfile').style.display = 'none';
             })
@@ -288,10 +389,35 @@
         document.getElementById('userProfile').style.display = 'inline';
         document.getElementById('userName').textContent = localStorage.getItem('userName');
     }
+
+    // toggle the bubble when clicking the user logo
+    document.getElementById('userLogo').addEventListener('click', function(event) {
+        event.stopPropagation(); // prevent the document click event from immediately hiding the bubble
+        const userName = localStorage.getItem('userName');
+        if (userName) {
+            document.getElementById('userName').textContent = userName;
+            const userBubble = document.getElementById('userBubble');
+
+            if (userBubble.style.display === 'none' || !userBubble.style.display) {
+                userBubble.style.display = 'block';
+            } else {
+                userBubble.style.display = 'none';
+            }
+        }
+    });
+
+    // hide the bubble if clicking anywhere else on the page
+    document.addEventListener('click', function(event) {
+        const userBubble = document.getElementById('userBubble');
+        if (!document.getElementById('userLogo').contains(event.target)) {
+            userBubble.style.display = 'none';
+        }
+    });
 </script>
 
 <!-- bootstrap JS for modal and carousel functionality -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

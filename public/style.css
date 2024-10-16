@@ -57,14 +57,44 @@ a:hover, button:hover {
     align-items: center;
 }
 
-.navbar-nav {
-    margin-left: auto;
+/* Adjusted navbar to center items */
+.navbar-collapse {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-/* align dropdown to the right */
-.navbar-collapse {
-    justify-content: flex-end;
+.navbar-nav {
+    flex: 1;
+    justify-content: center; /* Centers the navbar links */
 }
+
+/* Profile section alignment */
+#userProfile {
+    display: flex;
+    align-items: center;
+    position: relative; /* Ensure relative positioning for the tooltip */
+}
+
+/* tooltip */
+.user-bubble {
+    display: none;
+    position: absolute;
+    background-color: #f8e8d4;
+    color: #815c3f;
+    padding: 15px; /* Increase padding for more space */
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    line-height: 1.5; /* Adjust line height for better readability */
+    top: -75px; /* Move it further up to prevent cutoff */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+
 
 /* 1st section w/ image and text */
 .section-one {
@@ -345,7 +375,6 @@ a:hover, button:hover {
     .navbar-toggler {
         order: 2;
         margin-left: auto;
-        border: none;
     }
 
     /* menu appears below the burger */
@@ -372,13 +401,11 @@ a:hover, button:hover {
 
     }
 
-
     .navbar-nav .nav-link {
         text-align: center; /* make sure the text is left-aligned */
         padding: 10px 20px; /* keep padding balanced for dropdown */
         width: 100%;
         color: #503629; /* dark brown text color */
-
     }
 }
 
@@ -449,6 +476,36 @@ footer {
     border: 2px solid #815c3f;
 }
 
+/* style for user logo */
+.user-logo {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 50%;  /* Optional: make the logo circular */
+}
+
+/* hides user name by default */
+.user-name {
+    display: none;
+}
+
+#logoutButton {
+    background-color: transparent;
+    color: #815c3f;
+    border: 2px solid #815c3f;
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+#logoutButton:hover {
+    background-color: #815c3f;
+    color: white;
+    text-decoration: none; /* Ensure no underline */
+}
+
+
 @media (max-width: 992px) {
     .why-love-it {
         text-align: left;
@@ -457,5 +514,24 @@ footer {
     .why-love-it h4 {
         text-align: center;
     }
-}
 
+    .navbar-collapse {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; /* Moves items to the bottom */
+    }
+
+    #authButtons,
+    #userProfile {
+        margin-top: auto; /* Pushes the buttons to the bottom of the menu */
+        display: flex;
+        justify-content: center;
+        padding-bottom: 10px;
+    }
+
+    #userLogo {
+        display: none !important;
+    }
+
+
+}
