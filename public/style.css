@@ -9,8 +9,8 @@ body {
 /* hover over links/buttons makes it grow/pop out */
 a:hover, button:hover {
     cursor: url('paw.png') 16 16, auto;
-    transform: scale(1.2); /* Grows the cursor by 20% */
-    transition: transform 0.3s ease; /* Smooth transition */
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
 }
 
 /* general style for all sections */
@@ -39,16 +39,13 @@ a:hover, button:hover {
     font-size: 1.3rem;
     font-weight: 700;
     color: #815c3f;
-    text-transform: none;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px;
 }
 
 .navbar-nav .nav-link:hover {
     color: #503629;
 }
 
-/* navbar background color */
 .navbar {
     background-color: #fce5d4 !important;
     padding: 10px 20px;
@@ -57,7 +54,7 @@ a:hover, button:hover {
     align-items: center;
 }
 
-/* Adjusted navbar to center items */
+/* navbar  center items */
 .navbar-collapse {
     display: flex;
     justify-content: space-between;
@@ -67,14 +64,14 @@ a:hover, button:hover {
 
 .navbar-nav {
     flex: 1;
-    justify-content: center; /* Centers the navbar links */
+    justify-content: center;
 }
 
-/* Profile section alignment */
+/* profile section alignment */
 #userProfile {
     display: flex;
     align-items: center;
-    position: relative; /* Ensure relative positioning for the tooltip */
+    position: relative;
 }
 
 /* tooltip */
@@ -83,22 +80,19 @@ a:hover, button:hover {
     position: absolute;
     background-color: #f8e8d4;
     color: #815c3f;
-    padding: 15px; /* Increase padding for more space */
+    padding: 15px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 0.9rem;
-    line-height: 1.5; /* Adjust line height for better readability */
-    top: -75px; /* Move it further up to prevent cutoff */
+    line-height: 1.5;
+    top: -75px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
-
-
-/* 1st section w/ image and text */
 .section-one {
-    background-color: #c3cdc1; /* light green */
+    background-color: #c3cdc1;
 }
 
 .section-one h1,
@@ -118,7 +112,6 @@ a:hover, button:hover {
     font-family: 'Pacifico', cursive;
     font-size: 2rem;
     color: #fce5d4;
-    font-weight: normal;
 }
 
 .section-one p {
@@ -126,7 +119,6 @@ a:hover, button:hover {
     color: white;
 }
 
-/* image and text section */
 .section-one .image-section img,
 .third-section .image-section img {
     width: 100%;
@@ -141,9 +133,8 @@ a:hover, button:hover {
     text-align: left;
 }
 
-/* 2nd section w/ slideshow */
 .section-two {
-    background-color: #fce5d4; /* Beige */
+    background-color: #fce5d4;
     padding: 60px 10%;
 }
 
@@ -158,9 +149,7 @@ a:hover, button:hover {
 .carousel {
     flex: 1;
     max-width: 35%;
-    margin-right: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 
 .carousel-item img {
@@ -181,8 +170,6 @@ a:hover, button:hover {
 .slideshow-text h4 {
     font-size: 2rem;
     font-weight: bold;
-    color: #503629;
-    font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -192,7 +179,6 @@ a:hover, button:hover {
     line-height: 1.8;
 }
 
-/* 3rd section (why choose us and join now) */
 .third-section {
     background-color: #c3cdc1;
     text-align: center;
@@ -222,55 +208,50 @@ a:hover, button:hover {
     list-style-type: disc;
     font-size: 1.1rem;
     margin-top: 10px;
-    color: #374e48;
     padding-left: 15px;
+    color: #374e48;
 }
 
 .why-love-it li {
     margin-bottom: 10px;
 }
 
-/* mid image in 3rd section */
 .third-section .image-section {
     flex: 1;
     max-width: 350px;
     margin: 0 auto;
 }
 
-/* free treats text */
 .free-treats {
     flex: 1;
-    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.free-treats h4,
+.free-treats p {
+    color: #374e48;
+}
+
 .free-treats h4 {
     font-size: 2rem;
-    font-weight: bold;
-    color: #374e48;
-    margin-bottom: 20px;
 }
 
 .free-treats p {
-    font-family: Georgia;
     font-size: 1.2rem;
-    color: #374e48;
     margin-bottom: 20px;
     max-width: 250px;
-    width: 100%;
     text-align: center;
+    font-family: 'Georgia' ;
 }
 
-/* centered join button */
 .join-now-btn {
     font-size: 1.2rem;
     color: white;
     background-color: #ff6b6b;
     padding: 12px 30px;
-    font-weight: bold;
     border-radius: 25px;
 }
 
@@ -278,40 +259,25 @@ a:hover, button:hover {
     background-color: #e05555;
 }
 
-/* modal styles */
 .modal-content {
     background-color: #f8e8d4;
     border-radius: 15px;
     padding: 20px;
 }
 
-.modal-title {
-    color: #815c3f;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
+.modal-title,
 .modal-body label {
-    color: #503629;
-    font-family: 'Georgia', serif;
-    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #815c3f;
 }
 
-.modal-body input {
-    font-family: 'Georgia', serif;
-    font-size: 1rem;
-}
-
+.modal-body input,
 .modal-body .form-check-label {
     font-family: 'Georgia', serif;
-    color: #503629;
 }
 
 .modal-body .btn-primary {
     background-color: #ff6b6b;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
     padding: 10px;
     border-radius: 25px;
     text-transform: uppercase;
@@ -321,96 +287,70 @@ a:hover, button:hover {
     background-color: #e05555;
 }
 
-.modal-header .btn-close {
-    color: #503629;
-}
-
-/* center  modal */
 .modal-dialog {
     margin-top: 100px;
 }
 
-.navbar .auth-buttons {
-    margin-left: auto; /* Pushes the buttons to the right side */
-    display: flex;
-    gap: 10px;
-}
 
-/* sign-in/up buttons style */
-.btn-brown, .btn-outline-brown {
-    background-color: #815c3f;
-    color: white;
+.btn-brown, .btn-outline-brown, #logoutButton {
     font-weight: bold;
-}
-
-.btn-outline-brown {
-    background-color: transparent;
     color: #815c3f;
     border: 2px solid #815c3f;
 }
 
-.btn-outline-brown:hover {
+
+.btn-brown {
     background-color: #815c3f;
     color: white;
-    border: 2px solid #815c3f;
 }
 
-/* responsive behavior */
+.btn-brown:hover, .btn-outline-brown:hover {
+    background-color: #503629;
+    color: white;
+}
+
+/* responsiveness  */
 @media (max-width: 992px) {
     .navbar {
-        display: flex;
         justify-content: space-between;
-        align-items: center;
         height: auto;
         padding: 1px 20px;
     }
 
-    /* keeps logo on the left */
     .navbar-brand {
         order: 1;
         margin-right: auto;
     }
 
-    /* hamburger stays on the right */
     .navbar-toggler {
         order: 2;
         margin-left: auto;
     }
 
-    /* menu appears below the burger */
     .navbar-collapse {
-        position: absolute; /* positions dropdown relative to the navbar */
-        top: 90px; /* positions dropdown just below the hamburger icon */
-        right: 0px; /* aligns it to the right underneath the icon */
-        width: auto; /* adjusts width based on content */
-        max-width: fit-content; /* ensures width fits the content */
-        background-color: #e0e7da; /* light sage green */
-        border-radius: 8px; /* add a slight rounding to the dropdown */
-        border: 2px solid #815c3f;
-        padding: 10px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* slight shadow for dropdown */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 20px;
     }
 
-    .navbar-nav {
-        text-align: center; /* center the text */
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start; /* aligns items left for dropdown */
-        padding-left: 0;
-        margin: 0;
 
+    .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        gap: 20px;
+        padding: 10px 0;
     }
 
     .navbar-nav .nav-link {
-        text-align: center; /* make sure the text is left-aligned */
-        padding: 10px 20px; /* keep padding balanced for dropdown */
-        width: 100%;
-        color: #503629; /* dark brown text color */
+        padding: 10px;
+        color: #503629;
+        text-align: center;
     }
-}
 
-/* responsive layout adjustments */
-@media (max-width: 992px) {
     .section-one,
     .section-two,
     .third-section {
@@ -419,30 +359,26 @@ a:hover, button:hover {
         min-height: auto;
     }
 
-    .section-one .text-section,
-    .section-two .slideshow-text,
-    .why-love-it,
-    .free-treats {
-        max-width: 100%;
-        text-align: center;
+    /* center  buttons  */
+    #authButtons, #userProfile {
+        display: flex;
+        justify-content: center;
         margin-top: 20px;
+        width: 100%;
     }
 
-    .third-section .image-section {
-        max-width: 80%;
+    #logoutButton {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-left: 20%;
+        width: 60%;
     }
 
-    /* menu aligns to the right */
-    .navbar-nav {
-        flex-direction: column;
-        align-items: flex-end;
-        margin-left: 0;
-    }
 
-    .navbar-collapse {
-        justify-content: flex-end;
+    #userLogo {
+        display: none !important;
     }
-
 }
 
 footer {
@@ -455,83 +391,14 @@ footer {
     margin: 0 auto;
 }
 
-.btn-brown {
-    background-color: #815c3f; /* main brown color */
-    color: white;
-}
-
-.btn-brown:hover {
-    background-color: #503629; /* darker brown for hover */
-    color: white;
-}
-
-.btn-outline-brown {
-    color: #815c3f;
-    border: 2px solid #815c3f;
-}
-
-.btn-outline-brown:hover {
-    background-color: #815c3f;
-    color: white;
-    border: 2px solid #815c3f;
-}
-
 /* style for user logo */
 .user-logo {
     width: 40px;
     height: 40px;
     cursor: pointer;
-    border-radius: 50%;  /* Optional: make the logo circular */
-}
-
-/* hides user name by default */
-.user-name {
-    display: none;
-}
-
-#logoutButton {
-    background-color: transparent;
-    color: #815c3f;
-    border: 2px solid #815c3f;
-    padding: 5px 15px;
-    font-weight: bold;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-#logoutButton:hover {
-    background-color: #815c3f;
-    color: white;
-    text-decoration: none; /* Ensure no underline */
+    border-radius: 50%;
 }
 
 
-@media (max-width: 992px) {
-    .why-love-it {
-        text-align: left;
-    }
-
-    .why-love-it h4 {
-        text-align: center;
-    }
-
-    .navbar-collapse {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end; /* Moves items to the bottom */
-    }
-
-    #authButtons,
-    #userProfile {
-        margin-top: auto; /* Pushes the buttons to the bottom of the menu */
-        display: flex;
-        justify-content: center;
-        padding-bottom: 10px;
-    }
-
-    #userLogo {
-        display: none !important;
-    }
 
 
-}

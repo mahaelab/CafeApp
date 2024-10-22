@@ -14,7 +14,7 @@ app.use(session({
   secret: 'yourSecretKey',  // secret key for encryption
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: true }
 }));
 
 // db connection
@@ -50,75 +50,141 @@ app.post('/signup', async (req, res) => {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // checks if email exists
+    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).send('Internal server error');
+      }
 
-    db.query(
-        'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-        [name, email, hashedPassword],
-        (err, result) => {
-          if (err) {
-            console.error('Database error:', err);
-            return res.status(500).send('Error signing up');
+      if (results.length > 0) {
+        // duplicate email message
+        console.error('Duplicate email detected');
+        return res.status(409).json({ message: 'Email already exists' });
+      }
+
+      // hash password and inserts new user
+      const hashedPassword = await bcrypt.hash(password, 10);
+      db.query(
+          'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+          [name, email, hashedPassword],
+          (err, result) => {
+            if (err) {
+              console.error('Database error:', err);
+              return res.status(500).send('Error signing up');
+            }
+            console.log('User inserted into database:', result);
+            return res.status(201).json({ success: true, message: 'User registered successfully' });
           }
-          console.log('User inserted into database:', result);
-          return res.status(201).send('User registered successfully');
-        }
-    );
+      );
+    });
   } catch (error) {
     console.error('Error during sign-up:', error);
     return res.status(500).send('Internal server error');
   }
 });
 
-
 // user login route
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).send('Both email and password are required.');
+    return res.status(400).json({ message: 'Both email and password are required.' });
   }
 
-  //check if user exists
+  // checks if user exists
   db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
     if (err) {
       console.error('Error fetching user from database:', err);
-      return res.status(500).send('Error logging in');
+      return res.status(500).json({ message: 'Error logging in' });
     }
 
     if (results.length === 0) {
-      return res.status(401).send('User not found');
+      return res.status(401).json({ message: 'User not found' });
     }
 
     const user = results[0];
 
-    // compare hashed password
+    // compares hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       req.session.user = { id: user.id, name: user.name };
       res.json({ success: true, user: { name: user.name } });
     } else {
-      res.json({ success: false, message: 'Invalid credentials' });
+      res.status(401).json({ message: 'Invalid credentials' });
     }
   });
 });
+
+
+// user join route - same as signup for consistency
+app.post('/join', async (req, res) => {
+  console.log('Join request received');
+  console.log('Request body:', req.body);
+
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ success: false, message: 'All fields are required.' });
+  }
+
+  try {
+    // checks if email already exists
+    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ success: false, message: 'Error checking email' });
+      }
+
+      if (results.length > 0) {
+        console.log('Duplicate email detected');
+        return res.status(409).json({ success: false, message: 'Email already exists' });
+      }
+
+      // hash password and insert new user
+      const hashedPassword = await bcrypt.hash(password, 10);
+      db.query(
+          'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+          [name, email, hashedPassword],
+          (err, result) => {
+            if (err) {
+              console.error('Database error:', err);
+              return res.status(500).json({ success: false, message: 'Error registering user' });
+            }
+            console.log('User inserted into database:', result);
+
+            // Automatically log the user in after registration
+            req.session.user = { id: result.insertId, name: name };
+            return res.status(201).json({ success: true, message: 'User registered successfully', user: { name } });
+          }
+      );
+    });
+  } catch (error) {
+    console.error('Error during join request:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+
 
 // cancel subscription
 app.post('/opt-out', (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
-    return res.status(400).send('User ID is required to opt-out.');
+    return res.status(400).json({ success: false, message: 'User ID is required to opt-out.' });
   }
 
   db.query('UPDATE users SET opt_out = 1 WHERE id = ?', [userId], (err, result) => {
     if (err) {
       console.error('Error opting out:', err);
-      return res.status(500).send('Error opting out');
+      return res.status(500).json({ success: false, message: 'Error opting out' });
     }
-    res.send('You have successfully opted out of emails.');
+    res.json({ success: true, message: 'You have successfully opted out of emails.' });
   });
 });
+
 
 // tests the database connection
 app.get('/test-db', (req, res) => {
@@ -133,14 +199,16 @@ app.get('/test-db', (req, res) => {
 });
 
 // user logout route
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      return res.status(500).send('Error logging out');
+      return res.status(500).json({ success: false, message: 'Error logging out' });
     }
-    res.send('Logged out successfully');
+    res.json({ success: true });
   });
 });
+
+
 
 
 // starts server
