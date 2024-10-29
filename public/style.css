@@ -31,10 +31,12 @@ a:hover, button:hover {
     height: 110px;
     width: auto;
     vertical-align: middle;
+    background: transparent;
 }
 
 /* navbar links style */
 .navbar-nav .nav-link {
+    display: inline-block;
     font-family: 'Georgia', serif;
     font-size: 1.3rem;
     font-weight: 700;
@@ -54,7 +56,7 @@ a:hover, button:hover {
     align-items: center;
 }
 
-/* navbar  center items */
+/* navbar center items */
 .navbar-collapse {
     display: flex;
     justify-content: space-between;
@@ -244,7 +246,7 @@ a:hover, button:hover {
     margin-bottom: 20px;
     max-width: 250px;
     text-align: center;
-    font-family: 'Georgia' ;
+    font-family: 'Georgia';
 }
 
 .join-now-btn {
@@ -291,13 +293,17 @@ a:hover, button:hover {
     margin-top: 100px;
 }
 
-
 .btn-brown, .btn-outline-brown, #logoutButton {
+    display: inline-block;
     font-weight: bold;
     color: #815c3f;
     border: 2px solid #815c3f;
 }
 
+#logoutButton:hover {
+    background-color: #815c3f;
+    color: white;
+}
 
 .btn-brown {
     background-color: #815c3f;
@@ -309,7 +315,7 @@ a:hover, button:hover {
     color: white;
 }
 
-/* responsiveness  */
+/* responsiveness */
 @media (max-width: 992px) {
     .navbar {
         justify-content: space-between;
@@ -335,7 +341,6 @@ a:hover, button:hover {
         padding-bottom: 20px;
     }
 
-
     .navbar-nav {
         display: flex;
         flex-direction: row;
@@ -359,7 +364,7 @@ a:hover, button:hover {
         min-height: auto;
     }
 
-    /* center  buttons  */
+    /* center buttons */
     #authButtons, #userProfile {
         display: flex;
         justify-content: center;
@@ -374,7 +379,6 @@ a:hover, button:hover {
         margin-left: 20%;
         width: 60%;
     }
-
 
     #userLogo {
         display: none !important;
@@ -397,8 +401,51 @@ footer {
     height: 40px;
     cursor: pointer;
     border-radius: 50%;
+    background: transparent;
 }
 
+@media (max-width: 992px) {
+    #userLogoButton {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        bottom: -100px;
+        left: 80%;
+        transform: translateX(-50%);
+    }
+}
 
+#userLogo {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: none;
+}
 
+#userLogoButton:hover img {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
 
+@media (max-width: 992px) {
+    #userLogoButton:hover img {
+        transform: scale(1.2);
+        transition: transform 0.3s ease;
+    }
+}
+
+a:focus {
+    outline: none;
+    text-decoration: none;
+}
