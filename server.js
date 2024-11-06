@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'yourSecretKey',  // secret key for encryption
+    secret: 'yourSecretKey',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
@@ -33,6 +33,8 @@ db.connect((err) => {
     console.log('Connected to the MySQL database.');
 });
 
+app.locals.db = db; // expose db for use in tests
+
 // serve landing page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -46,24 +48,21 @@ app.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-        return res.status(400).send('All fields are required.');
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
 
     try {
-        // checks if email exists
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
             if (err) {
                 console.error('Database error:', err);
-                return res.status(500).send('Internal server error');
+                return res.status(500).json({ success: false, message: 'Internal server error' });
             }
 
             if (results.length > 0) {
-                // duplicate email message
                 console.error('Duplicate email detected');
-                return res.status(409).json({ message: 'Email already exists' });
+                return res.status(409).json({ success: false, message: 'Email already exists' });
             }
 
-            // hash password and inserts new user
             const hashedPassword = await bcrypt.hash(password, 10);
             db.query(
                 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
@@ -71,16 +70,17 @@ app.post('/signup', async (req, res) => {
                 (err, result) => {
                     if (err) {
                         console.error('Database error:', err);
-                        return res.status(500).send('Error signing up');
+                        return res.status(500).json({ success: false, message: 'Error signing up' });
                     }
                     console.log('User inserted into database:', result);
+                    req.session.user = { id: result.insertId, name };
                     return res.status(201).json({ success: true, message: 'User registered successfully' });
                 }
             );
         });
     } catch (error) {
         console.error('Error during sign-up:', error);
-        return res.status(500).send('Internal server error');
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 
@@ -89,34 +89,31 @@ app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).json({ message: 'Both email and password are required.' });
+        return res.status(400).json({ success: false, message: 'Both email and password are required.' });
     }
 
-    // checks if user exists
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
         if (err) {
             console.error('Error fetching user from database:', err);
-            return res.status(500).json({ message: 'Error logging in' });
+            return res.status(500).json({ success: false, message: 'Error logging in' });
         }
 
         if (results.length === 0) {
-            return res.status(401).json({ message: 'User not found' });
+            return res.status(401).json({ success: false, message: 'User not found' });
         }
 
         const user = results[0];
-
-        // compares hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
             req.session.user = { id: user.id, name: user.name };
             res.json({ success: true, user: { name: user.name } });
         } else {
-            res.status(401).json({ message: 'Invalid credentials' });
+            res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
     });
 });
 
-// user join route - same as signup for consistency
+// user join route
 app.post('/join', async (req, res) => {
     console.log('Join request received');
     console.log('Request body:', req.body);
@@ -128,7 +125,6 @@ app.post('/join', async (req, res) => {
     }
 
     try {
-        // checks if email already exists
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
             if (err) {
                 console.error('Database error:', err);
@@ -140,7 +136,6 @@ app.post('/join', async (req, res) => {
                 return res.status(409).json({ success: false, message: 'Email already exists' });
             }
 
-            // hash password and insert new user
             const hashedPassword = await bcrypt.hash(password, 10);
             db.query(
                 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
@@ -152,8 +147,7 @@ app.post('/join', async (req, res) => {
                     }
                     console.log('User inserted into database:', result);
 
-                    // Automatically log the user in after registration
-                    req.session.user = { id: result.insertId, name: name };
+                    req.session.user = { id: result.insertId, name };
                     return res.status(201).json({ success: true, message: 'User registered successfully', user: { name } });
                 }
             );
@@ -164,24 +158,27 @@ app.post('/join', async (req, res) => {
     }
 });
 
-// cancel subscription
-app.post('/opt-out', (req, res) => {
-    const { userId } = req.body;
-
-    if (!userId) {
-        return res.status(400).json({ success: false, message: 'User ID is required to opt-out.' });
+// user profile route
+app.get('/profile', (req, res) => {
+    if (req.session && req.session.user) {
+        const userId = req.session.user.id;
+        db.query('SELECT name, email FROM users WHERE id = ?', [userId], (err, results) => {
+            if (err) {
+                console.error('Error fetching profile:', err);
+                return res.status(500).json({ success: false, message: 'Error retrieving profile' });
+            }
+            if (results.length > 0) {
+                res.json({ success: true, user: results[0] });
+            } else {
+                res.status(404).json({ success: false, message: 'User not found' });
+            }
+        });
+    } else {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
     }
-
-    db.query('UPDATE users SET opt_out = 1 WHERE id = ?', [userId], (err, result) => {
-        if (err) {
-            console.error('Error opting out:', err);
-            return res.status(500).json({ success: false, message: 'Error opting out' });
-        }
-        res.json({ success: true, message: 'You have successfully opted out of emails.' });
-    });
 });
 
-// tests the database connection
+// database connection test
 app.get('/test-db', (req, res) => {
     db.query('SELECT 1 + 1 AS result', (err, results) => {
         if (err) {
@@ -203,7 +200,7 @@ app.post('/logout', (req, res) => {
     });
 });
 
-// Export the app for testing purposes
+// Export the app for testing
 module.exports = app;
 
 // starts server
