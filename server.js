@@ -10,11 +10,16 @@ const session = require('express-session');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// session config 30 min timeout
 app.use(session({
-    secret: 'yourSecretKey',
+    secret: 'secretkey',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: {
+        secure: false,
+        maxAge: 1800000 // 30 minutes in milliseconds
+    }
 }));
 
 // db connection
