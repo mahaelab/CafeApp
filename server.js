@@ -47,25 +47,21 @@ app.get('/', (req, res) => {
 
 // user sign up route
 app.post('/signup', async (req, res) => {
-    console.log('Sign-up request received');
-    console.log('Request body:', req.body);
-
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-        return res.status(400).json({ success: false, message: 'All fields are required.' });
+        return res.status(400).json({ success: false, message: 'all fields are required.' });
     }
 
     try {
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
             if (err) {
-                console.error('Database error:', err);
-                return res.status(500).json({ success: false, message: 'Internal server error' });
+                console.error('database error during email check:', err);
+                return res.status(500).json({ success: false, message: 'an error occurred. please try again.' });
             }
 
             if (results.length > 0) {
-                console.error('Duplicate email detected');
-                return res.status(409).json({ success: false, message: 'Email already exists' });
+                return res.status(409).json({ success: false, message: 'email already exists.' });
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -74,20 +70,21 @@ app.post('/signup', async (req, res) => {
                 [name, email, hashedPassword],
                 (err, result) => {
                     if (err) {
-                        console.error('Database error:', err);
-                        return res.status(500).json({ success: false, message: 'Error signing up' });
+                        console.error('database error during user creation:', err);
+                        return res.status(500).json({ success: false, message: 'could not create account. please try again.' });
                     }
-                    console.log('User inserted into database:', result);
+                    console.log('user inserted into database:', result);
                     req.session.user = { id: result.insertId, name };
-                    return res.status(201).json({ success: true, message: 'User registered successfully' });
+                    return res.status(201).json({ success: true, message: 'user registered successfully.' });
                 }
             );
         });
     } catch (error) {
-        console.error('Error during sign-up:', error);
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+        console.error('error during sign-up:', error);
+        return res.status(500).json({ success: false, message: 'an unexpected error occurred.' });
     }
 });
+
 
 // user login route
 app.post('/login', (req, res) => {
@@ -100,23 +97,30 @@ app.post('/login', (req, res) => {
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
         if (err) {
             console.error('Error fetching user from database:', err);
-            return res.status(500).json({ success: false, message: 'Error logging in' });
+            return res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
         }
 
         if (results.length === 0) {
-            return res.status(401).json({ success: false, message: 'User not found' });
+            // Send specific message if the email does not exist
+            return res.status(404).json({ success: false, message: 'Email does not exist.' });
         }
 
         const user = results[0];
         const isMatch = await bcrypt.compare(password, user.password);
-        if (isMatch) {
-            req.session.user = { id: user.id, name: user.name };
-            res.json({ success: true, user: { name: user.name } });
-        } else {
-            res.status(401).json({ success: false, message: 'Invalid credentials' });
+
+        if (!isMatch) {
+            // Send specific message if the password is incorrect
+            return res.status(401).json({ success: false, message: 'Invalid password. Please try again.' });
         }
+
+        // If credentials are valid, create a session
+        req.session.user = { id: user.id, name: user.name };
+        return res.json({ success: true, user: { name: user.name } });
     });
 });
+
+
+
 
 // user join route
 app.post('/join', async (req, res) => {
@@ -165,23 +169,25 @@ app.post('/join', async (req, res) => {
 
 // user profile route
 app.get('/profile', (req, res) => {
-    if (req.session && req.session.user) {
-        const userId = req.session.user.id;
-        db.query('SELECT name, email FROM users WHERE id = ?', [userId], (err, results) => {
-            if (err) {
-                console.error('Error fetching profile:', err);
-                return res.status(500).json({ success: false, message: 'Error retrieving profile' });
-            }
-            if (results.length > 0) {
-                res.json({ success: true, user: results[0] });
-            } else {
-                res.status(404).json({ success: false, message: 'User not found' });
-            }
-        });
-    } else {
-        res.status(401).json({ success: false, message: 'Unauthorized' });
+    if (!req.session || !req.session.user) {
+        return res.status(401).json({ success: false, message: 'unauthorized access.' });
     }
+
+    const userId = req.session.user.id;
+    db.query('SELECT name, email FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error('error fetching profile:', err);
+            return res.status(500).json({ success: false, message: 'an error occurred while retrieving profile.' });
+        }
+
+        if (results.length > 0) {
+            res.json({ success: true, user: results[0] });
+        } else {
+            res.status(404).json({ success: false, message: 'user not found.' });
+        }
+    });
 });
+
 
 // database connection test
 app.get('/test-db', (req, res) => {
