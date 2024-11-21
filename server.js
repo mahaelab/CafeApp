@@ -101,7 +101,7 @@ app.post('/login', (req, res) => {
         }
 
         if (results.length === 0) {
-            // Send specific message if the email does not exist
+            // Sends a message if the email does not exist
             return res.status(404).json({ success: false, message: 'Email does not exist.' });
         }
 
@@ -109,15 +109,18 @@ app.post('/login', (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            // Send specific message if the password is incorrect
+            // Sends a message if the password is incorrect
             return res.status(401).json({ success: false, message: 'Invalid password. Please try again.' });
         }
 
-        // If credentials are valid, create a session
+        // If credentials are valid, creates a session
         req.session.user = { id: user.id, name: user.name };
-        return res.json({ success: true, user: { name: user.name } });
+
+        // Sends success response with a redirect to the main page
+        return res.json({ success: true, user: { name: user.name }, redirect: '/' });
     });
 });
+
 
 
 
@@ -211,7 +214,7 @@ app.post('/logout', (req, res) => {
     });
 });
 
-// Export the app for testing
+// exports  app for testing
 module.exports = app;
 
 // starts server

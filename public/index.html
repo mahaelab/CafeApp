@@ -89,7 +89,7 @@
                         <input type="password" class="form-control" id="signInPassword" placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Sign In</button>
-                    <!-- dynamic error message -->
+                    <!-- error message -->
                     <div id="signInError" class="mt-2 text-danger" style="display:none;"></div>
                     <!-- success message -->
                     <div id="signInMessage" class="mt-2 text-success" style="display:none;">Successfully signed in!</div>
@@ -603,8 +603,8 @@
                 errorDiv.textContent = result.message;
                 errorDiv.style.display = 'block';
             } else {
-                // Redirect to a profile page or another page on success
-                window.location.href = '/profile';
+                // Redirect to the main page (ensure this matches your app's main page)
+                window.location.href = '/';
             }
         } catch (error) {
             console.error('Error during sign-in:', error);
@@ -612,6 +612,7 @@
             errorDiv.style.display = 'block';
         }
     });
+
 </script>
 
 
